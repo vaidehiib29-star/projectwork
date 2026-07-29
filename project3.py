@@ -89,12 +89,6 @@ while True:
         print("\n Thank you for using the student Data Organizer!")
         break
     else:
-        print("Invalid choice. Please try again.")                           
-
-         
-
-                      
-
-
-
-
+        print("Invalid choice. Please try again.")
+        print("Enter your number: ")
+        print("")
