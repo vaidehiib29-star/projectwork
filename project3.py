@@ -2,7 +2,7 @@ students = []
 subjects_set = set()
 print("Welcome to the student Data Organizer!")
 while True:
-    print("""Select an opetion:
+    print("""Select an option:
     1. Add Student
     2. Display All Students
     3. Update Student Information
@@ -59,7 +59,7 @@ while True:
             if student["id"] == update_id:
                 found = True
                 student["age"] = int(input("Enter new age: "))
-                new_subjects = input("Enter new subjects(comma-seprated):").split(",")
+                new_subjects = input("Enter new subjects(comma-separated):").split(",")
                 new_subjects = [subject.strip() for subject in new_subjects]
                 student["subjects"] = new_subjects
                 for subject in new_subjects:
