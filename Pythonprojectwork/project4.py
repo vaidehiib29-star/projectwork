@@ -212,7 +212,7 @@ def show2d():
 print("Welcome to Data Analyzer and Transformer")
 
 while True:
-    print("=== MAIN MENU ===")
+    print("===== MAIN MENU =====")
     print("1. Input Data")
     print("2. Display Data Summary")
     print("3. Factorial")
