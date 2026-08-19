@@ -117,5 +117,4 @@ print("New Salary:", e1.get_salary())
 #-----Negative Slary----
 print("\nTesting Negative Salary")
 e1.set_salary(-10000)
-        
-                
+
