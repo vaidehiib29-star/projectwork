@@ -138,7 +138,7 @@ def main():
         print("2. View All Entries")
         print("3. Search for an Entry")
         print("4. Delete All Entries")
-        print("5. Exit")
+        print("5. Exit") 
 
         try:
             choice = int(input("Please select an option: "))
