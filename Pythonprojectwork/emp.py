@@ -3,7 +3,7 @@ class Employee:
     def __init__(self, name, employee_id, salary):
         self.name = name
         self.employee_id = employee_id
-        self.__salary = salary 
+        self.__salary = salary
 
     # Get Salary
     def get_salary(self):
