@@ -1,0 +1,36 @@
+import pandas as pd
+
+# Create book inventory
+books = {
+    "Title": [
+        "Python Basics",
+        "Data Science",
+        "The Alchemist",
+        "Wings of Fire",
+        "Machine Learning"
+    ],
+    "Author": [
+        "John Smith",
+        "David Miller",
+        "Paulo Coelho",
+        "A P J Abdul Kalam",
+        "Tom Brown"
+    ],
+    "Genre": [
+        "Education",
+        "Technology",
+        "Fiction",
+        "Biography",
+        "Technology"
+    ],
+    "Price": [350, 550, 300, 400, 650],
+    "Quantity": [20, 15, 25, 18, 10]
+}
+
+inventory = pd.DataFrame(books)
+
+# Save data into CSV file
+inventory.to_csv("inventory.csv", index=False)
+
+print("Inventory file created successfully!")
+print(inventory)

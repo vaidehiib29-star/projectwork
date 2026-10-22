@@ -1,0 +1,33 @@
+import pandas as pd
+
+# Create sales data
+sales = {
+    "Date": [
+        "2026-01-05",
+        "2026-01-12",
+        "2026-02-08",
+        "2026-02-15",
+        "2026-03-10",
+    ],
+    "Title": [
+        "Python Basics",
+        "Data Science",
+        "Machine Learning",
+        "Python Basics",
+        "Data Science",
+    ],
+    "Quantity Sold": [3, 2, 4, 2, 3, 5, 4, 2],
+    "Total Revenue": [
+        1050, 1100, 1200, 800,
+        1950, 1750, 2200, 600
+    ]
+}
+
+# Convert data into DataFrame
+df = pd.DataFrame(sales)
+
+# Save data into CSV file
+df.to_csv("sales.csv", index=False)
+
+print("Sales CSV file created successfully!")
+print(df)
