@@ -24,7 +24,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+                                            
 
 class Bookstore:
     """Manage book inventory, sales, reports, and charts."""
@@ -67,7 +67,7 @@ class Bookstore:
         # Check required columns
         if list(self.inventory.columns) != self.inventory_columns:
             if not all(c in self.inventory.columns
-                       for c in self.inventory_columns):
+                    for c in self.inventory_columns):
                 raise ValueError("Invalid columns in inventory.csv")
 
         if not all(c in self.sales.columns for c in self.sales_columns):
