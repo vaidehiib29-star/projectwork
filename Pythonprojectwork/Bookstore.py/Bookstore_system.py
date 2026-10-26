@@ -1,68 +1,26 @@
-
-"""
-Project Name: Bookstore Inventory and Data Analytics System
-
-Description:
-This project manages bookstore inventory, adds new books, updates stock,
-records book sales, generates sales reports, and displays charts.
-
-Required libraries:
-    pandas
-    numpy
-    matplotlib
-    seaborn
-
-Required CSV files:
-    inventory.csv
-    sales.csv
-
-Both CSV files are created automatically if they do not exist.
-"""
-
-import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+<<<<<<< HEAD
                                             
+=======
+>>>>>>> d16cc8cec22bc8d6e8a0b9b42de3fcbef5ed6df7
 
 class Bookstore:
-    """Manage book inventory, sales, reports, and charts."""
-
     def __init__(self):
-        """Initialize the CSV files and load the data."""
-
-        self.inventory_file = "inventory.csv"
+        self.inv_file = "inventory.csv"
         self.sales_file = "sales.csv"
-
-        self.inventory_columns = [
-            "Title", "Author", "Genre", "Price", "Quantity"
-        ]
-
-        self.sales_columns = [
-            "Date", "Title", "Quantity Sold", "Total Revenue"
-        ]
-
-        self.load_data()
-
-    def load_data(self):
-        """Create missing CSV files and load existing data."""
-
-        # Create inventory file if it does not exist
-        if not os.path.exists(self.inventory_file):
-            pd.DataFrame(columns=self.inventory_columns).to_csv(
-                self.inventory_file, index=False
-            )
-
-        # Create sales file if it does not exist
-        if not os.path.exists(self.sales_file):
-            pd.DataFrame(columns=self.sales_columns).to_csv(
-                self.sales_file, index=False
-            )
-
-        # Read the CSV files
-        self.inventory = pd.read_csv(self.inventory_file)
+        f1 = open(self.inv_file, "a+")
+        f1.close()
+        f2 = open(self.sales_file, "a+")
+        f2.close()
+        self.inventory = pd.read_csv(self.inv_file)
+        if len(self.inventory.columns) == 0:
+            self.inventory = pd.DataFrame(columns=["Title", "Author", "Genre", "Price", "Quantity"])
+            self.inventory.to_csv(self.inv_file, index=False)
         self.sales = pd.read_csv(self.sales_file)
+<<<<<<< HEAD
 
         # Check required columns
         if list(self.inventory.columns) != self.inventory_columns:
@@ -276,157 +234,121 @@ class Bookstore:
 
         try:
             self.inventory.to_csv(self.inventory_file, index=False)
+=======
+        if len(self.sales.columns) == 0:
+            self.sales = pd.DataFrame(columns=["Date", "Title", "Quantity Sold", "Total Revenue"])
+>>>>>>> d16cc8cec22bc8d6e8a0b9b42de3fcbef5ed6df7
             self.sales.to_csv(self.sales_file, index=False)
 
-        except OSError as error:
-            # Restore the original in-memory data if saving fails
-            self.inventory.loc[index, "Quantity"] = stock
-            self.sales.drop(self.sales.index[-1], inplace=True)
-            print("Could not save the sale:", error)
-            return
+    def show_books(self):
+        print("ALL BOOKS")
+        if len(self.inventory) == 0:
+            print("No books found in inventory!")
+        else:
+            print(self.inventory)
 
-        print("Sale recorded successfully!")
-        print(f"Book: {sale['Title']}")
-        print(f"Quantity sold: {quantity}")
-        print(f"Total revenue: Rs. {revenue:.2f}")
+    def add_book(self):
+        print("Add New Book")
+        title = input("Enter book title: ")
+        author = input("Enter author name:")
+        genre = input("Enter genre: ")
+        price = int(input("Enter price: "))
+        quantity = int(input("Enter quantity: "))
+        new_data = {"Title": title, "Author": author, "Genre": genre, "Price": price, "Quantity": quantity}
+        self.inventory = pd.concat([self.inventory, pd.DataFrame([new_data])], ignore_index=True)
+        self.inventory.to_csv(self.inv_file,index=False)
+        print("Book added sucessfully!")
+
+    def update_stock(self):
+        print("Update Stock")
+        t_name = input("Enter book title: ")
+        new_qty = int(input("Enter new quantity: "))
+        for i in range(len(self.inventory)):
+            if self.inventory.loc[i, "Title"] == t_name:
+                self.inventory.loc[i, "Quantity"] = new_qty
+        self.inventory.to_csv(self.inv_file, index=False)
+        print("Stock updated successfully.")
+    my_store = Bookstore()
+    my_store.menu()
+
+    def sell_book(self):
+        print("Sell Book")
+        t_name = input("Enter book title to sell: ")
+        qty_sold = int(input("Enter quantity sold: "))
+        s_date = input("Enter date (YYYY-MM-DD): ")
+        book_price = 0
+        found_idx = -1
+        for i in range(len(self.inventory)):
+            if self.inventory.loc[i, "Title"] == t_name:
+                book_price = self.inventory.loc[i, "Price"]
+                current_qty = self.inventory.loc[i, "Quantity"]
+                found_idx = i
+                break
+        if found_idx != -1:
+            if current_qty >= qty_sold:
+                self.inventory.loc[found_idx, "Quantity"] = current_qty - qty_sold
+                total_rev = book_price * qty_sold
+                sale_data = {"Date": s_date, "Title": t_name, "Quantity Sold": qty_sold, "Total Revenue": total_rev}
+                self.sales = pd.concat([self.sales, pd.DataFrame([sale_data])], ignore_index=True)
+                self.inventory.to_csv(self.inv_file, index=False)
+                self.sales.to_csv(self.sales_file, index=False)
+                print("Sale recorded! Total revenue:", total_rev)
+            else:
+                print("Not enough stock available!")
+        else:
+            print("Book not found in inventory.")
 
     def report(self):
-        """Display total sales, revenue, and best-selling books."""
-
-        print("\n--- Sales Report ---")
-
-        if self.sales.empty:
-            print("No sales data available.")
-            return
-
-        quantities = self.sales["Quantity Sold"].to_numpy()
-        revenues = self.sales["Total Revenue"].to_numpy()
-
-        print(f"Total books sold: {np.sum(quantities)}")
-        print(f"Total revenue: Rs. {np.sum(revenues):.2f}")
-        print(f"Average sale revenue: Rs. {np.mean(revenues):.2f}")
-
-        best = self.sales.groupby("Title")["Quantity Sold"].sum()
-        highest = best.max()
-
-        print("Best-selling book(s):")
-        print(best[best == highest].to_string())
-
-        print("\nRevenue by book:")
-        print(
-            self.sales.groupby("Title")["Total Revenue"]
-            .sum().sort_values(ascending=False).to_string()
-        )
+        print("SALES REPORT")
+        if len(self.sales) == 0:
+            print("No sales recorded yet.")
+        else:
+            total_qty_sold = np.sum(self.sales["Quantity Sold"].values)
+            total_rev_all = np.sum(self.sales["Total Revenue"].values)
+            print("Total books sold:", total_qty_sold)
+            print("Total revenue earned:", total_rev_all)
+            print(self.sales.groupby("Title")["Quantity Sold"].sum())
 
     def charts(self):
-        """Display sales charts using Matplotlib and Seaborn."""
-
-        if self.sales.empty:
-            print("No sales data available for charts.")
-            return
-
-        data = self.sales.copy()
-
-        # Add genre information to sales
-        genre_data = self.inventory[["Title", "Genre"]].drop_duplicates(
-            subset=["Title"]
-        )
-        data = data.merge(genre_data, on="Title", how="left")
-
-        # Chart 1: Books sold
-        data.groupby("Title")["Quantity Sold"].sum().plot(
-            kind="bar", figsize=(8, 5)
-        )
-        plt.title("Books Sold")
-        plt.xlabel("Book Title")
-        plt.ylabel("Quantity Sold")
-        plt.tight_layout()
-        plt.show()
-
-        # Chart 2: Monthly revenue
-        data["Month"] = data["Date"].dt.to_period("M").astype(str)
-
-        data.groupby("Month")["Total Revenue"].sum().plot(
-            kind="line", marker="o", figsize=(8, 5)
-        )
-        plt.title("Monthly Sales Revenue")
-        plt.xlabel("Month")
-        plt.ylabel("Revenue (Rs.)")
-        plt.tight_layout()
-        plt.show()
-
-        # Chart 3: Revenue by genre
-        genre_revenue = data.groupby("Genre")["Total Revenue"].sum()
-        genre_revenue = genre_revenue.dropna()
-
-        if not genre_revenue.empty and genre_revenue.sum() > 0:
-            genre_revenue.plot(
-                kind="pie", autopct="%1.1f%%", figsize=(7, 7)
-            )
-            plt.title("Revenue Share by Genre")
-            plt.ylabel("")
-            plt.tight_layout()
+        if len(self.sales) > 0:
+            plt.figure(figsize=(8, 5))
+            self.sales.groupby("Title")["Quantity Sold"].sum().plot(kind="bar")
+            plt.title("Quantity Sold per Book")
+            plt.xlabel("Title")
+            plt.ylabel("Sold Quantity")
+            plt.show()
+            plt.figure(figsize=(6, 4))
+            sns.heatmap(self.sales[["Quantity Sold", "Total Revenue"]].corr(), anot=True, cmap="coolwarm")
+            plt.title("Sales Correlation Heatmap")
             plt.show()
         else:
-            print("Genre revenue chart is not available.")
-
-        # Chart 4: Correlation heatmap
-        correlation = data[
-            ["Quantity Sold", "Total Revenue"]
-        ].corr()
-
-        plt.figure(figsize=(6, 4))
-        sns.heatmap(correlation, annot=True, cmap="coolwarm", vmin=-1, vmax=1)
-        plt.title("Sales Quantity and Revenue Correlation")
-        plt.tight_layout()
-        plt.show()
+            print("Not enough data to show charts.")
 
     def menu(self):
-        """Display the main menu until the user chooses Exit."""
-
         while True:
-            print("\n====== BOOKSTORE MENU ======")
-            print("1. Show Books")
-            print("2. Add Book")
+            print("BOOKSTORE MANAGEMENT")
+            print("1. View Books")
+            print("2. Add New Book")
             print("3. Update Stock")
             print("4. Sell Book")
-            print("5. Sales Report")
+            print("5. View Report")
             print("6. Show Charts")
             print("7. Exit")
-
-            choice = input("Enter your choice: ").strip()
-
-            if choice == "1":
+            choise = input("Enter your choise (1-7): ")
+            if choise == "1":
                 self.show_books()
-
-            elif choice == "2":
+            elif choise == "2":
                 self.add_book()
-
-            elif choice == "3":
+            elif choise == "3":
                 self.update_stock()
-
-            elif choice == "4":
+            elif choise == "4":
                 self.sell_book()
-
-            elif choice == "5":
+            elif choise == "5":
                 self.report()
-
-            elif choice == "6":
+            elif choise == "6":
                 self.charts()
-
-            elif choice == "7":
-                print("Thank you for using Bookstore System!")
+            elif choise == "7":
+                print("thank you good Bye!")
                 break
-
             else:
-                print("Invalid choice. Please try again.")
-
-
-# Start the program
-if __name__ == "__main__":
-    try:
-        bookstore = Bookstore()
-        bookstore.menu()
-
-    except (OSError, ValueError, pd.errors.ParserError) as error:
-        print("Could not start the bookstore system:", error)
+                print("Invalid choise!")
